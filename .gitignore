@@ -132,3 +132,16 @@ pnpm-debug.log*
 *.bak
 
 test.pdf
+
+uploads/*
+!uploads/.gitkeep
+
+presentations/*
+!presentations/.gitkeep
+
+reports/*
+!reports/.gitkeep
+
+uploads/
+presentations/
+reports/
