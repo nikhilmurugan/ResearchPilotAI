@@ -1,0 +1,134 @@
+# ============================================================
+# ResearchPilotAI - Git Ignore
+# ============================================================
+
+# -----------------------------
+# Environment & Secrets
+# -----------------------------
+.env
+.env.*
+!.env.example
+
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# -----------------------------
+# Testing / Coverage
+# -----------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# -----------------------------
+# IDE / Editors
+# -----------------------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+.idea/
+*.iml
+
+# -----------------------------
+# OS Files
+# -----------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -----------------------------
+# Application Generated Files
+# -----------------------------
+
+# Uploaded user documents
+uploads/*
+!uploads/.gitkeep
+
+# Generated reports
+reports/*
+!reports/.gitkeep
+
+# Generated DOCX files
+documents/*
+!documents/.gitkeep
+
+# Generated presentations
+presentations/*
+!presentations/.gitkeep
+
+# Generated temporary files
+tmp/
+temp/
+
+# -----------------------------
+# Databases / Local Storage
+# -----------------------------
+*.db
+*.sqlite
+*.sqlite3
+
+# -----------------------------
+# Logs
+# -----------------------------
+*.log
+logs/
+
+# -----------------------------
+# Node / Frontend caches
+# -----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# -----------------------------
+# Build / Cache
+# -----------------------------
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# -----------------------------
+# Generated Python files
+# -----------------------------
+*.pyo
+*.pyd
+
+# -----------------------------
+# Local model / AI files
+# -----------------------------
+*.gguf
+*.bin
+*.safetensors
+
+# -----------------------------
+# Local development files
+# -----------------------------
+*.local
+*.backup
+*.bak
+
+test.pdf

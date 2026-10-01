@@ -1,0 +1,52 @@
+[
+    {
+        "question": "what is deep learning",
+        "answer": "Deep learning is a subset of machine learning that uses artificial neural networks to model and solve complex problems, particularly those involving large amounts of data and structured patterns. It involves training a network with multiple layers of processing units (neurons) to learn from input data and make predictions or decisions based on patterns it has identified.\n\nKey components of deep learning include:\n\n1. **Neural Networks**: Composed of interconnected nodes (neurons) organized into layers, they process information through a series of transformations to produce an output.\n2. **Activation Functions**: These functions introduce non-linearity to the network, allowing it to learn and model complex patterns.\n3. **Training**: The process involves feeding input data into the network, adjusting weights and biases to minimize prediction errors using techniques like backpropagation.\n4. **Applications**: Deep learning is widely used in areas such as image recognition, natural language processing (NLP), speech recognition, autonomous vehicles, and more.\n\nDeep learning has revolutionized many fields by enabling computers to learn from data without explicit programming, allowing for more accurate and efficient solutions to complex problems.",
+        "time": "26-06-2026 17:17"
+    },
+    {
+        "question": "what is deep learning",
+        "answer": "Deep learning is a subset of machine learning that uses artificial neural networks to learn and improve from data. It involves building layers of interconnected nodes or \"neurons\" in a network, which process and transform input data into useful outputs.\n\nIn a deep learning model, the input data is fed through the network layer by layer, and as it travels through the network, it learns patterns and relationships between the inputs and outputs. The model's parameters (weights and biases) are adjusted during training to minimize the error between predicted outputs and actual outputs.\n\nDeep learning has been used in many applications, including image and speech recognition, natural language processing, autonomous vehicles, fraud detection, and more. It has also been applied to areas like healthcare, where it can assist with diagnosing diseases and predicting patient outcomes based on medical data.",
+        "time": "26-06-2026 17:26"
+    },
+    {
+        "question": "what is pytorch",
+        "answer": "PyTorch is an open-source machine learning library developed by Facebook's AI Research lab (FAIR) and now maintained by the PyTorch team at NVIDIA. It is primarily used for building and training deep learning models, particularly those involving neural networks. Here are some key features and characteristics of PyTorch:\n\n1. **Dynamic Computation Graphs**: Unlike TensorFlow, which uses static computation graphs, PyTorch allows the creation and manipulation of dynamic computational graphs during runtime. This means that operations can be added to the graph incrementally as they are performed, and it is easier to visualize and debug the model's behavior.\n\n2. **Ease of Use for Beginners**: Due to its simplicity and ease of use, PyTorch has become a popular choice for beginners in machine learning and deep learning, especially those who prefer Python programming.\n\n3. **Compatibility with Other Libraries**: PyTorch integrates well with other libraries like NumPy and Pandas, making it easier to work with data and perform various types of computations.\n\n4. **Speed and Flexibility**: It offers a wide range of optimization options and can be used for both CPU and GPU acceleration, which is crucial for training large models efficiently.\n\n5. **Active Community and Support**: PyTorch has a large and active community that provides support through forums, documentation, and regular updates to the library.\n\n6. **Support for Different Architectures**: It supports various types of neural network architectures, including feedforward networks, recurrent neural networks (RNNs), convolutional neural networks (CNNs), and more.\n\n7. **Advanced Features**: PyTorch includes features like automatic differentiation, which simplifies the process of training models by automatically computing gradients, and tensor operations that are optimized for performance.\n\n8. **Extensive Documentation and Resources**: The library comes with extensive documentation, tutorials, and resources that help users learn how to use it effectively.\n\nPyTorch is widely used in academia and industry for research, development, and production environments due to its flexibility, ease of use, and powerful capabilities in deep learning model building and training.",
+        "time": "26-06-2026 17:52"
+    },
+    {
+        "question": "What is 2+2? Answer in one word.",
+        "answer": "4",
+        "time": "26-06-2026 18:51"
+    },
+    {
+        "question": "What is the capital of France? Answer in one word.",
+        "answer": "Paris",
+        "time": "26-06-2026 18:55"
+    },
+    {
+        "question": "What is 2+2? Answer in one word.",
+        "answer": "4",
+        "time": "26-06-2026 19:03"
+    },
+    {
+        "question": "what is agent in AI",
+        "answer": "In artificial intelligence (AI), an \"agent\" refers to a software entity that perceives its environment through sensors, forms internal representations of the world, and acts upon it using actuators. The primary goal of an agent is to maximize some notion of \"utility\" or \"reward.\" Agents can be broadly categorized into different types based on their learning capabilities:\n\n1. **Supervised Learning Agents**: These agents are trained using labeled data where each input-output pair (or sample) has a known outcome. They learn to map inputs to outputs by minimizing a loss function.\n\n2. **Unsupervised Learning Agents**: These agents discover patterns and structure in unlabeled data without any predefined goals or rewards. Examples include clustering algorithms like K-means and autoencoders.\n\n3. **Reinforcement Learning Agents**: These agents learn through interaction with an environment, receiving feedback (rewards or penalties) for their actions. The goal is to maximize cumulative reward over time. Reinforcement learning is particularly useful in scenarios where the outcome of actions is not predictable.\n\n4. **Probabilistic Agents**: These agents operate under uncertainty and make decisions based on probabilities. They use Bayesian networks or other probabilistic models to estimate likelihoods of outcomes before making choices.\n\n5. **Hybrid Agents**: These are agents that combine multiple approaches, such as combining supervised learning with reinforcement learning, to improve performance in complex tasks.\n\nAgents can be implemented using various programming languages and frameworks, including Python, Java, C++, and others. Libraries like TensorFlow, PyTorch, OpenAI Gym, and R provide tools for developing and training AI agents.",
+        "time": "26-06-2026 19:24"
+    },
+    {
+        "question": "What is 2+2? Answer in one word.",
+        "answer": "4",
+        "time": "26-06-2026 19:37"
+    },
+    {
+        "question": "what is  Distributed systems in cloud computing?",
+        "answer": "Distributed systems in cloud computing refer to a collection of loosely coupled computers or components that work together to provide a single, unified service or application. In cloud computing, distributed systems are used to provide scalability, reliability, and fault tolerance, as well as to increase performance and resource utilization.\n\nKey characteristics of distributed systems in cloud computing include:\n\n1. Reliability: Distributed systems are designed to operate even if some of the components fail. They typically use redundancy and failover mechanisms to ensure that the service is always available.\n\n2. Scalability: Distributed systems can be easily scaled up or down to meet changing demand. They can add or remove resources as needed, without affecting the overall performance of the system.\n\n3. Fault tolerance: Distributed systems are designed to handle errors and failures gracefully. They can detect and recover from failures without losing data or performance.\n\n4. High availability: Distributed systems provide a high level of availability, meaning that the service is always available to users. They can quickly recover from downtime and minimize downtime when it does occur.\n\n5. Flexibility: Distributed systems are highly flexible and can be used to build a variety of applications and services, including web applications, cloud storage, data processing, and machine learning.\n\nOverall, distributed systems are a key component of cloud computing, providing a reliable, scalable, and fault-tolerant infrastructure for building and deploying applications.",
+        "time": "01-10-2026 14:29"
+    },
+    {
+        "question": "what is monolithic architecture?",
+        "answer": "Monolithic architecture refers to a software architecture where all the components of an application are combined into a single, unified codebase. In a monolithic architecture, all the different parts of the application are tightly coupled and interdependent, and changes to one part of the application can have a ripple effect on other parts.\n\nThis architecture is often used in smaller, simpler applications where the complexity of the application is low, and the team is small enough to manage the entire codebase. However, monolithic architectures can become difficult to scale and maintain as the application grows in size and complexity.\n\nIn contrast, microservices architecture divides the application into smaller, independent services that can be deployed and scaled independently. Each service is responsible for a specific functionality and communicates with other services through well-defined APIs. This architecture is often used in larger, more complex applications where the codebase is large, distributed, and requires more sophisticated deployment and management strategies.",
+        "time": "01-10-2026 14:39"
+    }
+]

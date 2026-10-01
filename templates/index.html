@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchPilotAI — AI-Powered Academic Research Platform</title>
+    <meta name="description" content="ResearchPilotAI is an AI-powered academic research platform built by Nikhil Murugan. Generate reports, citations, presentations, and analyze PDFs.">
+    <!-- Modern Typeface -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <body data-default-model="{{ default_model }}">
+    <div class="app-shell">
+                <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="brand-text">
+                    <h1>ResearchPilotAI</h1>
+                    <p class="subtitle">A Multi-Agent Research Intelligence Framework for Autonomous Scientific Discovery and Knowledge Synthesis</p>
+                    <p class="developer">Developed by Nikhil Murugan</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="settings-toggle-btn" class="btn btn-secondary btn-sm"><i class="fa-solid fa-sliders"></i> AI Model Settings</button>
+                <button id="login-trigger" class="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</button>
+            </div>
+        </header>
+
+        <!-- Collapsible Model Settings Panel -->
+        <div id="model-settings-panel" class="settings-panel hidden">
+            <div class="settings-header">
+                <h3><i class="fa-solid fa-sliders"></i> AI Model Configuration</h3>
+                <button id="close-settings" class="btn-close">&times;</button>
+            </div>
+            <div class="settings-grid">
+                <div class="settings-group">
+                    <label>AI Model</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="ai-model" value="{{ default_model }}" checked>
+                            <span>{{ default_model }} (Configured local model)</span>
+                        </label>
+                        {% if default_model != "qwen2.5:7b" %}
+                        <label class="radio-label">
+                            <input type="radio" name="ai-model" value="qwen2.5:7b">
+                            <span>qwen2.5:7b (High Quality)</span>
+                        </label>
+                        {% endif %}
+                        {% if default_model != "llama3.2:3b" %}
+                        <label class="radio-label">
+                            <input type="radio" name="ai-model" value="llama3.2:3b">
+                            <span>llama3.2:3b (Balanced)</span>
+                        </label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <label for="temp-slider">Temperature: <span id="temp-val">0.7</span></label>
+                    <input type="range" id="temp-slider" min="0" max="1" step="0.1" value="0.7">
+                    <span class="range-hint">Lower = more factual; Higher = more creative</span>
+                </div>
+                <div class="settings-group">
+                    <label for="max-tokens-input">Max Output Tokens</label>
+                    <input type="number" id="max-tokens-input" min="256" max="8192" value="2048">
+                    <span class="range-hint">Maximum token length for generated content</span>
+                </div>
+                <div class="settings-group">
+                    <label>Streaming Mode</label>
+                    <label class="radio-label">
+                        <input type="checkbox" id="streaming-toggle" checked>
+                        <span>Enable streaming responses (progressive display)</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <nav class="tab-nav" role="tablist">
+            <div class="nav-indicator"></div>
+            <button class="tab-btn active" data-tab="chat" role="tab"><i class="fa-solid fa-comments"></i> AI Chat</button>
+            <button class="tab-btn" data-tab="pdf" role="tab"><i class="fa-solid fa-file-pdf"></i> PDF Upload</button>
+            <button class="tab-btn" data-tab="agents" role="tab"><i class="fa-solid fa-robot"></i> Research Agents</button>
+            <button class="tab-btn" data-tab="enhancements" role="tab"><i class="fa-solid fa-wand-magic-sparkles"></i> Research Tools</button>
+            <button class="tab-btn" data-tab="report" role="tab"><i class="fa-solid fa-file-invoice"></i> Report Generator</button>
+            <button class="tab-btn" data-tab="docx" role="tab"><i class="fa-solid fa-file-word"></i> Document Generator</button>
+            <button class="tab-btn" data-tab="citation" role="tab"><i class="fa-solid fa-quote-right"></i> Citation Generator</button>
+            <button class="tab-btn" data-tab="ppt" role="tab"><i class="fa-solid fa-file-powerpoint"></i> PPT Generator</button>
+        </nav>
+
+        <main class="tab-content">
+                        <!-- Dashboard Statistics -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-comments"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Chats</h3>
+                        <p id="totalChats" class="counter" data-target="0">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
+                    <div class="stat-info">
+                        <h3>PDF Uploads</h3>
+                        <p id="pdfUploads" class="counter" data-target="0">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                    <div class="stat-info">
+                        <h3>Reports</h3>
+                        <p id="reportsGenerated" class="counter" data-target="0">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-file-word"></i></div>
+                    <div class="stat-info">
+                        <h3>DOCX</h3>
+                        <p id="docxGenerated" class="counter" data-target="0">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-file-powerpoint"></i></div>
+                    <div class="stat-info">
+                        <h3>PPT</h3>
+                        <p id="pptGenerated" class="counter" data-target="0">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-quote-left"></i></div>
+                    <div class="stat-info">
+                        <h3>Citations</h3>
+                        <p id="citationsGenerated" class="counter" data-target="0">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-stopwatch"></i></div>
+                    <div class="stat-info">
+                        <h3>Research Sessions</h3>
+                        <p id="researchSessions" class="counter" data-target="0">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="stat-info">
+                        <h3>Recent Activity</h3>
+                        <p id="recentActivity" class="counter" data-target="0">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chat -->
+            <section id="tab-chat" class="tab-panel active" role="tabpanel">
+                <div class="section-title-row">
+                    <div>
+                        <h2>AI Chat</h2>
+                        <p>Ask research questions and get instant AI responses with streaming.</p>
+                    </div>
+                    <button id="load-history-btn" class="btn btn-secondary">
+                        <i class="fa-solid fa-history"></i> Load Chat History
+                    </button>
+                </div>
+                <div id="chat-box" class="chat-box"></div>
+                <div class="input-row">
+                    <textarea id="chat-input" rows="1" placeholder="Ask anything about your research..." autocomplete="off"></textarea>
+                    <button id="chat-send" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send</button>
+                </div>
+            </section>
+
+            <!-- PDF Upload -->
+            <section id="tab-pdf" class="tab-panel" role="tabpanel">
+                <div class="panel-header">
+                    <h2>PDF Upload &amp; Analysis</h2>
+                    <p>Upload a PDF (up to 32 MB), extract text, and run AI analysis.</p>
+                </div>
+                <div class="upload-zone" id="upload-zone">
+                    <input type="file" id="pdf-file" accept=".pdf" hidden>
+                    <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                    <p>Drag &amp; drop a PDF here or click to browse</p>
+                    <p class="upload-hint">Supported: PDF up to 32 MB</p>
+                    <button type="button" class="btn btn-secondary" id="browse-pdf">Browse PDF</button>
+                </div>
+                <div id="upload-progress-bar" class="progress-bar hidden">
+                    <div id="upload-progress-fill" class="progress-fill"></div>
+                </div>
+                <div id="pdf-meta" class="meta-bar hidden"></div>
+                <div class="split-grid">
+                    <div class="card">
+                        <h3>Extracted Text</h3>
+                        <textarea id="pdf-text" readonly placeholder="Uploaded PDF text will appear here..."></textarea>
+                    </div>
+                    <div class="card">
+                        <h3>AI Analysis</h3>
+                        <button id="analyze-pdf" class="btn btn-primary" disabled><i class="fa-solid fa-magnifying-glass"></i> Analyze PDF</button>
+                        <div id="analysis-results" class="analysis-results">
+                            <div class="analysis-block">
+                                <h4>Summary</h4>
+                                <p id="analysis-summary">—</p>
+                            </div>
+                            <div class="analysis-block">
+                                <h4>Keywords</h4>
+                                <p id="analysis-keywords">—</p>
+                            </div>
+                            <div class="analysis-block">
+                                <h4>Research Insights</h4>
+                                <p id="analysis-insights">—</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card document-qa-card">
+                    <h3>Ask About This Document</h3>
+                    <div class="input-row document-question-row">
+                        <textarea id="document-question" rows="2" placeholder="Ask a question about the uploaded paper..." aria-label="Question about uploaded PDF"></textarea>
+                        <button id="ask-document" class="btn btn-primary" disabled><i class="fa-solid fa-magnifying-glass"></i> Ask</button>
+                    </div>
+                    <h4 class="document-result-label">Answer</h4>
+                    <div id="document-answer" class="document-answer" aria-live="polite"></div>
+                    <h4 class="document-result-label">Evidence / Sources</h4>
+                    <div id="document-sources" class="document-sources"></div>
+                </div>
+            </section>
+
+            <!-- Research Agents -->
+            <section id="tab-agents" class="tab-panel" role="tabpanel">
+                <div class="panel-header">
+                    <h2>Multi-Agent System</h2>
+                    <p>Specialized AI agents for research workflows.</p>
+                </div>
+                <div class="agent-grid">
+                    <button class="agent-card active" data-agent="research">
+                        <strong><i class="fa-solid fa-graduation-cap"></i> ResearchAgent</strong>
+                        <span>Deep topic research</span>
+                    </button>
+                    <button class="agent-card" data-agent="summary">
+                        <strong><i class="fa-solid fa-compress"></i> SummaryAgent</strong>
+                        <span>Summarize content</span>
+                    </button>
+                    <button class="agent-card" data-agent="citation">
+                        <strong><i class="fa-solid fa-feather"></i> CitationAgent</strong>
+                        <span>APA &amp; IEEE citations</span>
+                    </button>
+                    <button class="agent-card" data-agent="report">
+                        <strong><i class="fa-solid fa-file-lines"></i> ReportAgent</strong>
+                        <span>Full research report</span>
+                    </button>
+                </div>
+                <div id="citation-format-row" class="input-row hidden">
+                    <label for="citation-format">Citation format:</label>
+                    <select id="citation-format">
+                        <option value="both">APA + IEEE</option>
+                        <option value="apa">APA only</option>
+                        <option value="ieee">IEEE only</option>
+                    </select>
+                </div>
+                <textarea id="agent-input" placeholder="Enter topic or content for the selected agent..."></textarea>
+                <button id="run-agent" class="btn btn-primary"><i class="fa-solid fa-play"></i> Run Agent</button>
+                <div class="card output-card" style="margin-top: 20px;">
+                    <div class="section-title-row" style="margin-bottom: 12px;">
+                        <h3>Agent Output</h3>
+                        <button class="btn btn-secondary btn-sm" id="copy-agent-output"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre id="agent-output">Select an agent and run it to see results.</pre>
+                </div>
+            </section>
+
+            <!-- Research Tools (Enhancements) -->
+            <section id="tab-enhancements" class="tab-panel" role="tabpanel">
+                <div class="panel-header">
+                    <h2>Research Tools</h2>
+                    <p>Access advanced AI-powered research tools for academic workflows.</p>
+                </div>
+                <div class="split-grid">
+                    <div class="card">
+                        <h3>Select Tool</h3>
+                        <div class="tool-selector-grid">
+                            <button class="tool-select-btn active" data-tool="topic_generator">
+                                <div class="tool-btn-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                                <strong>Topic Generator</strong>
+                            </button>
+                            <button class="tool-select-btn" data-tool="gap_finder">
+                                <div class="tool-btn-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                                <strong>Gap Finder</strong>
+                            </button>
+                            <button class="tool-select-btn" data-tool="lit_review">
+                                <div class="tool-btn-icon"><i class="fa-solid fa-book-open"></i></div>
+                                <strong>Literature Review</strong>
+                            </button>
+                            <button class="tool-select-btn" data-tool="abstract_generator">
+                                <div class="tool-btn-icon"><i class="fa-solid fa-file-lines"></i></div>
+                                <strong>Abstract Generator</strong>
+                            </button>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label id="enhancement-label" for="enhancement-input">Research Domain / Keywords</label>
+                            <textarea id="enhancement-input" placeholder="e.g. quantum computing, deep learning in healthcare..."></textarea>
+                        </div>
+                        <button id="run-enhancement" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Output</button>
+                    </div>
+                    <div class="card output-card">
+                        <div class="section-title-row" style="margin-bottom: 15px;">
+                            <h3>Generated Results</h3>
+                            <button class="btn btn-secondary btn-sm" id="copy-enhancement"><i class="fa-regular fa-copy"></i> Copy</button>
+                        </div>
+                        <div class="output-container" id="enhancement-output">
+                            Select a tool, enter your details, and generate content.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Report Generator -->
+            <section id="tab-report" class="tab-panel" role="tabpanel">
+                <div class="panel-header">
+                    <h2>Report Generator (PDF)</h2>
+                    <p>Generate a structured academic PDF report with Abstract, Introduction, Methodology, Analysis, Findings, Conclusion, Future Scope, and References.</p>
+                </div>
+                <textarea id="report-input" placeholder="Enter your research topic or source material..."></textarea>
+                <button id="generate-report" class="btn btn-primary"><i class="fa-solid fa-file-export"></i> Generate PDF Report</button>
+                <div id="report-status" class="status-message"></div>
+                <a id="report-download" class="btn btn-secondary hidden" href="#" download><i class="fa-solid fa-download"></i> Download Report</a>
+            </section>
+
+            <!-- Document Generator (DOCX) -->
+            <section id="tab-docx" class="tab-panel" role="tabpanel">
+                <div class="panel-header">
+                    <h2>Document Generator (DOCX)</h2>
+                    <p>Generate a structured academic DOCX report with Abstract, Introduction, Methodology, Analysis, Findings, Conclusion, Future Scope, and References.</p>
+                </div>
+                <textarea id="docx-input" placeholder="Enter your research topic or source material..."></textarea>
+                <button id="generate-docx" class="btn btn-primary"><i class="fa-solid fa-file-word"></i> Generate DOCX Report</button>
+                <div id="docx-status" class="status-message"></div>
+                <a id="docx-download" class="btn btn-secondary hidden" href="#" download><i class="fa-solid fa-download"></i> Download DOCX Report</a>
+            </section>
+
+            <!-- Citation Generator -->
+            <section id="tab-citation" class="tab-panel" role="tabpanel">
+                <div class="panel-header">
+                    <h2>Citation Generator</h2>
+                    <p>Generate APA, IEEE, MLA, and Chicago citations for your research sources.</p>
+                </div>
+                <div class="split-grid">
+                    <div class="card">
+                        <h3>Source Information</h3>
+                        <div class="form-group">
+                            <label for="cite-title">Title <span class="required">*</span></label>
+                            <input type="text" id="cite-title" placeholder="e.g., Attention Is All You Need">
+                        </div>
+                        <div class="form-group">
+                            <label for="cite-author">Author(s)</label>
+                            <input type="text" id="cite-author" placeholder="e.g., Vaswani, A., Shazeer, N., Parmar, N., etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="cite-year">Year</label>
+                            <input type="text" id="cite-year" placeholder="e.g., 2017" maxlength="4">
+                        </div>
+                        <div class="form-group">
+                            <label for="cite-journal">Journal / Conference</label>
+                            <input type="text" id="cite-journal" placeholder="e.g., Advances in Neural Information Processing Systems">
+                        </div>
+                        <div class="form-group">
+                            <label for="cite-publisher">Publisher</label>
+                            <input type="text" id="cite-publisher" placeholder="e.g., Curran Associates, Inc.">
+                        </div>
+                        <button id="generate-citations" class="btn btn-primary" style="margin-top: 15px;"><i class="fa-solid fa-quote-right"></i> Generate Citations</button>
+                    </div>
+                    <div class="card">
+                        <h3>Generated Citations</h3>
+                        <div class="citation-output-block">
+                            <div class="citation-header">
+                                <strong>APA (7th Edition)</strong>
+                                <button class="btn-copy" data-target="cite-apa-val"><i class="fa-regular fa-copy"></i> Copy</button>
+                            </div>
+                            <pre id="cite-apa-val" class="citation-box">—</pre>
+                        </div>
+                        <div class="citation-output-block">
+                            <div class="citation-header">
+                                <strong>IEEE</strong>
+                                <button class="btn-copy" data-target="cite-ieee-val"><i class="fa-regular fa-copy"></i> Copy</button>
+                            </div>
+                            <pre id="cite-ieee-val" class="citation-box">—</pre>
+                        </div>
+                        <div class="citation-output-block">
+                            <div class="citation-header">
+                                <strong>MLA (9th Edition)</strong>
+                                <button class="btn-copy" data-target="cite-mla-val"><i class="fa-regular fa-copy"></i> Copy</button>
+                            </div>
+                            <pre id="cite-mla-val" class="citation-box">—</pre>
+                        </div>
+                        <div class="citation-output-block">
+                            <div class="citation-header">
+                                <strong>Chicago</strong>
+                                <button class="btn-copy" data-target="cite-chicago-val"><i class="fa-regular fa-copy"></i> Copy</button>
+                            </div>
+                            <pre id="cite-chicago-val" class="citation-box">—</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PPT Generator -->
+            <section id="tab-ppt" class="tab-panel" role="tabpanel">
+                <div class="panel-header">
+                    <h2>PPT Generator</h2>
+                    <p>Create a 10-slide PowerPoint with Cover, Executive Summary, Introduction, Literature Review, Methodology, Key Findings, Analysis, Future Scope, Conclusion, and References.</p>
+                </div>
+                <input type="text" id="ppt-title" placeholder="Presentation title">
+                <textarea id="ppt-content" placeholder="Enter research content for the presentation..."></textarea>
+                <button id="generate-ppt" class="btn btn-primary"><i class="fa-solid fa-file-powerpoint"></i> Generate PowerPoint</button>
+                <div id="ppt-status" class="status-message"></div>
+                <a id="ppt-download" class="btn btn-secondary hidden" href="#" download><i class="fa-solid fa-download"></i> Download Presentation</a>
+            </section>
+        </main>
+
+        <div id="toast" class="toast hidden"></div>
+        <div id="loader" class="loader hidden">
+            <div class="spinner"></div>
+            <span id="loader-text">Processing...</span>
+        </div>
+            <footer class="app-footer">
+            <p><strong>ResearchPilotAI</strong> | Developed by Nikhil Murugan | Version 2.0 | &copy; 2026</p>
+        </footer>
+    </div>
+
+    <div id="auth-overlay" class="auth-overlay hidden" aria-hidden="true">
+        <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+            <button id="auth-close" class="auth-close" aria-label="Close sign in dialog"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-brand">
+                <div class="brand-icon auth-logo"><i class="fa-solid fa-brain"></i></div>
+                <div>
+                    <p class="auth-kicker">Secure workspace</p>
+                    <h2 id="auth-title">ResearchPilotAI</h2>
+                </div>
+            </div>
+            <p class="auth-subtitle">Research Intelligence for Scientific Discovery</p>
+
+            <form class="auth-form" id="auth-form">
+                <label class="auth-field">
+                    <span>Email</span>
+                    <input type="email" placeholder="name@researchpilot.ai" autocomplete="email">
+                </label>
+                <label class="auth-field">
+                    <span>Password</span>
+                    <input type="password" placeholder="Enter your password" autocomplete="current-password">
+                </label>
+
+                <div class="auth-row">
+                    <label class="remember-me"><input type="checkbox"> <span>Remember me</span></label>
+                    <a href="#" class="auth-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="auth-button auth-button-primary">Sign In</button>
+                <button type="button" class="auth-button auth-button-secondary"><i class="fa-brands fa-google"></i> Continue with Google</button>
+
+                <p class="auth-signup">Don't have an account? <a href="#" class="auth-link">Create account</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

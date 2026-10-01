@@ -1,0 +1,41 @@
+{
+  "label": "Synthetic development fixture; not a scientific benchmark or empirical result.",
+  "cases": [
+    {
+      "id": "synthetic-crop-irrigation-1",
+      "document_id": "synthetic-crop-paper",
+      "question": "What effect did irrigation have on crop yield?",
+      "passages": [
+        {
+          "id": "crop-introduction-1",
+          "page": 1,
+          "text": "This synthetic development passage introduces crop monitoring."
+        },
+        {
+          "id": "crop-results-1",
+          "page": 3,
+          "text": "In this synthetic example, the irrigated plots had higher measured crop yield than the control plots."
+        }
+      ],
+      "relevant_passage_ids": ["crop-results-1"]
+    },
+    {
+      "id": "synthetic-attention-1",
+      "document_id": "synthetic-transformer-paper",
+      "question": "How does self-attention combine information?",
+      "passages": [
+        {
+          "id": "transformer-method-1",
+          "page": 2,
+          "text": "This synthetic development passage describes self-attention as combining token representations using learned weights."
+        },
+        {
+          "id": "transformer-appendix-1",
+          "page": 8,
+          "text": "This synthetic development passage contains formatting notes unrelated to attention."
+        }
+      ],
+      "relevant_passage_ids": ["transformer-method-1"]
+    }
+  ]
+}
