@@ -100,24 +100,28 @@ Provides application-level statistics and activity information.
 ---
 
 ## Technology Stack
-# Backend
+Backend
 - Python
 - Flask
-# AI
+
+AI
 - Large Language Model (LLM)
 - Ollama
 - Retrieval-Augmented Generation (RAG)
 - Vector Embeddings
 - Similarity-based Retrieval
-# Document Processing
+
+Document Processing
 - PDF processing
 - DOCX generation
 - PPT generation
-# Frontend
+
+Frontend
 - HTML
 - CSS
 - JavaScript
-# Data & Storage
+
+Data & Storage
 - SQLite
 - Vector embeddings
 - Local document storage
